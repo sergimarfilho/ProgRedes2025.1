@@ -26,11 +26,11 @@ ICMP_TYPE_NAMES = {
 }
 
 def mac_addr(bytes_addr):
-    """Converte bytes MAC para string no formato aa:bb:cc:dd:ee:ff"""
+    """Converte bytes MAC pra string no formato aa:bb:cc:dd:ee:ff"""
     return ':'.join(f'{b:02x}' for b in bytes_addr)
 
 def ipv4_addr(bytes_addr):
-    """Converte bytes IPv4 para string decimal."""
+    """Converte bytes IPv4 pra string decimal."""
     return '.'.join(str(b) for b in bytes_addr)
 
 def parse_ethernet_header(data):
@@ -138,7 +138,7 @@ def parse_tcp_header(data):
         "payload": payload
     }
 
-# Função para interpretar flags TCP
+# interpretar flags TCP
 def tcp_flags_str(flags):
     flags_names = [
         ('FIN', 0x001),
@@ -154,12 +154,12 @@ def tcp_flags_str(flags):
     return ', '.join(name for name, bit in flags_names if flags & bit)
 
 def ler_pcap(f):
-    # Lê o cabeçalho global pcap (24 bytes)
+    # Ler o cabeçalho global pcap (24 bytes)
     global_header = f.read(24)
     if len(global_header) < 24:
         raise ValueError("Arquivo pcap muito pequeno")
     magic_number = struct.unpack('I', global_header[0:4])[0]
-    # Poderia verificar magic_number para endianness e versão, omitido para simplicidade.
+    # Poderia verificar magic_number para endianness e versão omitido para simplicidade.
     # Loop para ler registros de pacotes
     while True:
         packet_header = f.read(16)
@@ -215,7 +215,7 @@ def main():
                 print(f"TOS: {ipv4_info['tos']}")
                 print(f"Identificação: {ipv4_info['identification']}")
 
-                # Protocolos internos
+                # Protocolo internos
                 proto = ipv4_info["protocol"]
                 ip_payload = ipv4_info["payload"]
 
@@ -242,7 +242,7 @@ def main():
                     print(f"Bandeiras: {tcp_flags_str(tcp_info['flags'])}")
                     print(f"Tamanho da Janela: {tcp_info['window_size']}")
 
-                    # Para aplicação carregada no TCP, mostrar até 200 bytes após SYN/SYN-ACK
+                    # Para aplicação carregada no TCP, vai mostrar até 200 bytes após SYN/SYN-ACK
                     # Identificar SYN ou SYN-ACK no pacote pela flags:
                     syn_flag = 0x002
                     ack_flag = 0x010
